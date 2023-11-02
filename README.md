@@ -9,9 +9,11 @@ In this work we need to :
 | Airplane | Body | 
 | --- | --- | 
 | ![image](https://github.com/CodeStone1125/renderAirplane/assets/72511296/708182a2-d63b-475e-9a40-90e51f69bae5)|![image](https://github.com/CodeStone1125/renderAirplane/assets/72511296/08d7e6c1-8443-416f-99ed-0b35e9a6f833)| 
+
 | Wing | Tail |
 | --- | --- | 
 |![image](https://github.com/CodeStone1125/renderAirplane/assets/72511296/52ef7f89-45d9-4ddc-a577-5b28c178e28f)| ![image](https://github.com/CodeStone1125/renderAirplane/assets/72511296/e42eb88b-626b-4b10-b548-010259865640)| 
+
 | Location spec | Control |
 | --- | --- | 
 | ![image](https://github.com/CodeStone1125/renderAirplane/assets/72511296/18c36686-56c2-456b-98b7-7f8bcdee468f)|![image](https://github.com/CodeStone1125/renderAirplane/assets/72511296/f8eda160-3f8f-4186-93cc-5ea8e0f20e15)|
