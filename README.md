@@ -8,15 +8,15 @@ In this work we need to :
 ## Rules
 | Airplane | Body | 
 | --- | --- | 
-| ![image](https://github.com/CodeStone1125/renderAirplane/assets/72511296/708182a2-d63b-475e-9a40-90e51f69bae5)|![image](https://github.com/CodeStone1125/renderAirplane/assets/72511296/08d7e6c1-8443-416f-99ed-0b35e9a6f833)| 
+|![279916490-708182a2-d63b-475e-9a40-90e51f69bae5](https://github.com/CodeStone1125/renderAirplane/assets/72511296/deb97948-a28c-42fc-a052-2cc3bad11d6f)|![279916730-08d7e6c1-8443-416f-99ed-0b35e9a6f833](https://github.com/CodeStone1125/renderAirplane/assets/72511296/728ce3a1-8e06-488a-9d76-c786213c7712)| 
 
 | Wing | Tail |
 | --- | --- | 
-|![image](https://github.com/CodeStone1125/renderAirplane/assets/72511296/52ef7f89-45d9-4ddc-a577-5b28c178e28f)| ![image](https://github.com/CodeStone1125/renderAirplane/assets/72511296/e42eb88b-626b-4b10-b548-010259865640)| 
+|![279916843-52ef7f89-45d9-4ddc-a577-5b28c178e28f](https://github.com/CodeStone1125/renderAirplane/assets/72511296/fa03d2c6-6b13-454d-b9d2-cd8f02f196d7)|![279916966-e42eb88b-626b-4b10-b548-010259865640](https://github.com/CodeStone1125/renderAirplane/assets/72511296/5ec1c11c-a745-4cac-a716-4c1e68bbb32e)| 
 
 | Location spec | Control |
 | --- | --- | 
-| ![image](https://github.com/CodeStone1125/renderAirplane/assets/72511296/18c36686-56c2-456b-98b7-7f8bcdee468f)|![image](https://github.com/CodeStone1125/renderAirplane/assets/72511296/f8eda160-3f8f-4186-93cc-5ea8e0f20e15)|
+| ![279917056-18c36686-56c2-456b-98b7-7f8bcdee468f](https://github.com/CodeStone1125/renderAirplane/assets/72511296/cc4a76e2-9094-4030-bd2b-980f8ba2bd60)|![279917161-f8eda160-3f8f-4186-93cc-5ea8e0f20e15](https://github.com/CodeStone1125/renderAirplane/assets/72511296/832e7362-5347-4139-831a-ed2cfa0be606)|
 
 ## Dependencies
 
@@ -386,7 +386,7 @@ The first trouble I met is "GFX Glitch" which mean my render object can't presen
  
 |GFX Glitch|
 | --- |
-|![image](https://github.com/CodeStone1125/renderAirplane/assets/72511296/f29986fe-789a-409e-9ab9-3ddec62a761f)| 
+|![279951678-f29986fe-789a-409e-9ab9-3ddec62a761f](https://github.com/CodeStone1125/renderAirplane/assets/72511296/893f40be-0923-4813-89f0-847d11850a03)| 
 
 
 sol: TA suggests me to check the draw order of vertex and it work. shout out to TA.
@@ -396,7 +396,7 @@ The second one is that my airplane tail will go to wrong location whenever I try
 
 |Tail is lost|
 | --- | 
-|![image](https://github.com/CodeStone1125/renderAirplane/assets/72511296/f9b63745-01e7-47e8-a434-0e0000863baf)| 
+|![279953867-f9b63745-01e7-47e8-a434-0e0000863baf](https://github.com/CodeStone1125/renderAirplane/assets/72511296/c7b409a2-24b8-4e3d-8d99-1ef4aa3fcf1a)| 
 
 
 sol: The root of problem is the order of  `glTranslatef() `, `glRotatef()`
@@ -415,7 +415,7 @@ I additionally implement a fountion to shot a bullet.
 
 | Bullet shot |
 | --- | 
-| ![image](https://github.com/CodeStone1125/renderAirplane/assets/72511296/6a8af357-edc4-47cc-bdfd-b8e785021e4e) | 
+| ![279957952-6a8af357-edc4-47cc-bdfd-b8e785021e4e (1)](https://github.com/CodeStone1125/renderAirplane/assets/72511296/243ab1e4-bcc8-4096-9728-e2901a585ef9)| 
 
 * Step1. Everytime `G`  be pressed, it will record the right now location for airplane.
 * Step2. base on location recorded in `Step1`, render a bullet and let it slow move forward until reach the limit distance 
