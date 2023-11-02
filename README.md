@@ -383,19 +383,21 @@ In this section, there 4 parts:
 ## Problems you encountered
 ### 1. GFX Glitch
 The first trouble I met is "GFX Glitch" which mean my render object can't present correctly
-
-|![image](https://github.com/CodeStone1125/renderAirplane/assets/72511296/f29986fe-789a-409e-9ab9-3ddec62a761f)| 
-| --- | 
+ 
 |GFX Glitch|
+| --- |
+|![image](https://github.com/CodeStone1125/renderAirplane/assets/72511296/f29986fe-789a-409e-9ab9-3ddec62a761f)| 
+
 
 sol: TA suggests me to check the draw order of vertex and it work. shout out to TA.
 
 ### 2. Tail's location goes wrong
 The second one is that my airplane tail will go to wrong location whenever I try to fly
 
-|![image](https://github.com/CodeStone1125/renderAirplane/assets/72511296/f9b63745-01e7-47e8-a434-0e0000863baf)| 
-| --- | 
 |Tail is lost|
+| --- | 
+|![image](https://github.com/CodeStone1125/renderAirplane/assets/72511296/f9b63745-01e7-47e8-a434-0e0000863baf)| 
+
 
 sol: The root of problem is the order of  `glTranslatef() `, `glRotatef()`
 if I rotate airplane in advance the axis of airplane would be different,
@@ -411,11 +413,10 @@ sol: The solution is in the `II. fly, forward and decent`
 ### Bullet shooting
 I additionally implement a fountion to shot a bullet.
 
-
-
-| ![image](https://github.com/CodeStone1125/renderAirplane/assets/72511296/6a8af357-edc4-47cc-bdfd-b8e785021e4e)| 
-| --- | 
 | Bullet shot |
+| --- | 
+| ![image](https://github.com/CodeStone1125/renderAirplane/assets/72511296/6a8af357-edc4-47cc-bdfd-b8e785021e4e) | 
+
 * Step1. Everytime `G`  be pressed, it will record the right now location for airplane.
 * Step2. base on location recorded in `Step1`, render a bullet and let it slow move forward until reach the limit distance 
 ```cpp
