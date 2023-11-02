@@ -245,6 +245,7 @@ void renderAirplane() {
     // 渲染飛機的函數，包括機身、機翼和機尾
     // 渲染機身
     glPushMatrix();
+    // Note: Airplane is rotated so the up direction is Y-axis not Z-axis
     glTranslatef(airplaneX, airplaneHeight, airplaneY);  // 平移至飛機底部中心，增加高度
     glRotatef(-airplaneRotationY, 0.0f, 1.0f, 0.0f);   // 根據旋轉角度旋轉飛機
     renderAirplaneBody();                             // 渲染飛機機身
@@ -285,16 +286,23 @@ In this section, there 4 parts:
 * fly an forward
 * Airplane body rotation
 * Trace location and angle
-#### I.Wings swing, fly an forward
+#### I.Wings swing, 
 * Step1. Everytime `SPACE` be pressed, it will increase the total angle that wings need to swing.
 * Step2. The direction of wing swing will change whenever it meet `20` or `-20` degree.
   Note:`flag` for decide the direction of wing Swing and it;s default to 1
 ```cpp
+   //Everytime `SPACE` be pressed, it will increase the total angle that wings need to swing.
    case GLFW_KEY_SPACE:
       airplaneWingRotation += 80;
       flag = 1;
     break;
 
+    //The direction of wing swing will change whenever it meet `20` or `-20` degree.
+    if (wingSwingAngle == 20 || wingSwingAngle == -20) {
+      flag = 1 - flag;
+    }
+
+    //slowly swing wings
     if (airplaneWingRotation > 0) {
       if (flag == 1) {
         wingSwingAngle += swingSpeed;
@@ -306,10 +314,87 @@ In this section, there 4 parts:
     }
 ```
 
-#### II.
+#### II. fly, forward and decent
+* Step1. Everytime `SPACE` be pressed, it will increase the total fly height and front distance that
+  airplane need to fly.
+* Step2. Caculate the target location with cos(forwardAngle), sin(forwardAngle)
+* Step3. slowly increase the height of airplane if needed
+  Note: Airplane is rotated so the up direction is Y-axis not Z-axis
+* Step4. slowly decrease the height of airplane if not rising and grounded
+```cpp
+    // Everytime `SPACE` be pressed, it will increase the total fly height and front distance that
+      airplane need to fly.
+    case GLFW_KEY_SPACE:
+       // 按住空格鍵時執行飛行操作
+       // 增加飛機的高度
+       targetHeight += 3;
+       front += 1.5;
+      break;
+
+    //Step2. Caculate the target location with cos(forwardAngle), sin(forwardAngle)
+    if (front > 0) {
+      forwardAngle = airplaneRotationY - 90;  // 計算前進方向的角度
+      airplaneX += flySpeed * cos(ANGLE_TO_RADIAN(forwardAngle));
+      airplaneY += flySpeed * sin(ANGLE_TO_RADIAN(forwardAngle));
+      front -= flySpeed;
+    }
+    //* Step3. slowly increase the height of airplane if needed
+    if (targetHeight > 0) {
+      airplaneHeight += ascentSpeed;
+      targetHeight -= ascentSpeed;
+    }
+    //* Step4. slowly decrease the height of airplane if not rising and grounded
+    else if (airplaneHeight > 2) {
+      airplaneHeight -= decentSpeed;
+    }
+```
+
 #### III.Airplane body rotation
-#### IV.Trace location and angle
+* Step1. Everytime `LEFT` or `RIGHT` be pressed, it will increase the total angle need to rotate.
+* Step2. slowly rotate the angle of airplane if `rotationY` still remain and it will decide turn left or right
+  by value of `rotationY`
+```cpp
+    //Everytime `LEFT` or `RIGHT` be pressed, it will increase the total angle need to rotate.
+    case GLFW_KEY_LEFT:
+        // 按下左箭頭鍵時執行向左轉的操作
+        rotationY -= 5.0f;
+
+        break;
+    case GLFW_KEY_RIGHT:
+        // 按下右箭頭鍵時執行向右轉的操作
+        rotationY += 5.0f;
+
+        break;
+    //slowly rotate the angle of airplane if `rotationY` still remain 
+    if (rotationY > 0) { //decide turn left or rightby value of `rotationY` 
+      airplaneRotationY += rotationSpeed;
+      rotationY -= rotationSpeed;
+      forwardAngle = airplaneRotationY - 90;
+    } else if (rotationY < 0) {
+      airplaneRotationY -= rotationSpeed;
+      rotationY += rotationSpeed;
+      forwardAngle = airplaneRotationY - 90;
+    }
+```
 ## Problems you encountered
 ### 1. GFX Glitch
+The first trouble I met is "GFX Glitch" which mean my render object can't present correctly
+
+![image](https://github.com/CodeStone1125/renderAirplane/assets/72511296/f29986fe-789a-409e-9ab9-3ddec62a761f)
+
+sol: TA suggests me to check the draw order of vertex and it work. shout out to TA.
+
 ### 2. Tail's location goes wrong
+The second one is that my airplane tail will go to wrong location whenever I try to fly
+
+![image](https://github.com/CodeStone1125/renderAirplane/assets/72511296/f9b63745-01e7-47e8-a434-0e0000863baf)
+
+sol: The root of problem is the order of  `glTranslatef() `, `glRotatef()`
+if I rotate airplane in advance the axis of airplane would be different,
+there I should `glTranslatef() ` first then `glRotatef()`.
+
 ### 3. Can't slowly raise airplane height
+Originally I set airplane height increase 5 as long as `SPACE` be pressed, but I airplane will
+teleport to the  "height+5" immediately instean of slow rise.
+
+sol: The solution is in the `II. fly, forward and decent`
