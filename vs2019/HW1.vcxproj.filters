@@ -1,0 +1,56 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="來源檔案">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="標頭檔">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="標頭檔\glad">
+      <UniqueIdentifier>{e4e88c92-5214-41e6-a33d-041e1315fef3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="標頭檔\glfw">
+      <UniqueIdentifier>{0ceb5d69-2349-4b06-b784-4dd9e687a913}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="標頭檔\glm">
+      <UniqueIdentifier>{4d077c73-5f95-4d54-9279-c5d536275ec3}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\src\opengl_context.cpp">
+      <Filter>來源檔案</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\main.cpp">
+      <Filter>來源檔案</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\camera.cpp">
+      <Filter>來源檔案</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\extern\glad\include\glad\gl.h">
+      <Filter>標頭檔\glad</Filter>
+    </ClInclude>
+    <ClInclude Include="..\extern\glfw\include\GLFW\glfw3.h">
+      <Filter>標頭檔\glfw</Filter>
+    </ClInclude>
+    <ClInclude Include="..\extern\glfw\include\GLFW\glfw3native.h">
+      <Filter>標頭檔\glfw</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\opengl_context.h">
+      <Filter>標頭檔</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\utils.h">
+      <Filter>標頭檔</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\camera.h">
+      <Filter>標頭檔</Filter>
+    </ClInclude>
+    <ClInclude Include="..\extern\glm\glm\glm.hpp">
+      <Filter>標頭檔\glm</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
