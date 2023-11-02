@@ -381,13 +381,18 @@ In this section, there 4 parts:
 The first trouble I met is "GFX Glitch" which mean my render object can't present correctly
 
 ![image](https://github.com/CodeStone1125/renderAirplane/assets/72511296/f29986fe-789a-409e-9ab9-3ddec62a761f)
-
+|![image](https://github.com/CodeStone1125/renderAirplane/assets/72511296/f29986fe-789a-409e-9ab9-3ddec62a761f)| 
+| --- | 
+|GFX Glitch|
 sol: TA suggests me to check the draw order of vertex and it work. shout out to TA.
 
 ### 2. Tail's location goes wrong
 The second one is that my airplane tail will go to wrong location whenever I try to fly
 
-![image](https://github.com/CodeStone1125/renderAirplane/assets/72511296/f9b63745-01e7-47e8-a434-0e0000863baf)
+
+|![image](https://github.com/CodeStone1125/renderAirplane/assets/72511296/f9b63745-01e7-47e8-a434-0e0000863baf)| 
+| --- | 
+|Tail is lost|
 
 sol: The root of problem is the order of  `glTranslatef() `, `glRotatef()`
 if I rotate airplane in advance the axis of airplane would be different,
@@ -398,3 +403,102 @@ Originally I set airplane height increase 5 as long as `SPACE` be pressed, but I
 teleport to the  "height+5" immediately instean of slow rise.
 
 sol: The solution is in the `II. fly, forward and decent`
+
+## Bonus
+### Bullet shooting
+I additionally implement a fountion to shot a bullet.
+
+
+
+| ![image](https://github.com/CodeStone1125/renderAirplane/assets/72511296/6a8af357-edc4-47cc-bdfd-b8e785021e4e)| 
+| --- | 
+| Bullet shot |
+* Step1. Everytime `G`  be pressed, it will record the right now location for airplane.
+* Step2. base on location recorded in `Step1`, render a bullet and let it slow move forward until reach the limit distance 
+```cpp
+//Render bullet
+void renderBullet() {
+  const float radius = 0.1f;
+  const float height = 0.6f;
+  const int segments = 64;
+  const float slice = 360.0f / segments;
+  glColor3f(RED);
+  glRotatef(90.0f, 1.0f, 0.0f, 0.0f);
+  glBegin(GL_QUAD_STRIP);
+
+  for (int i = 0; i <= segments; i++) {
+    float angle = slice * i;
+    float x = radius * std::cos(ANGLE_TO_RADIAN(angle));
+    float z = radius * std::sin(ANGLE_TO_RADIAN(angle));
+
+    // Vertices on the side of the cylinder
+    glVertex3f(x, 0.0f, z);
+    glVertex3f(x, height, z);
+  }
+
+  glEnd();
+
+  // Top and bottom faces
+  glBegin(GL_TRIANGLE_FAN);
+  glVertex3f(0.0f, 0.0f, 0.0f);  // Center of the bottom face
+
+  for (int i = 0; i <= segments; i++) {
+    float angle = slice * i;
+    float x = radius * std::cos(ANGLE_TO_RADIAN(angle));
+    float z = radius * std::sin(ANGLE_TO_RADIAN(angle));
+    glVertex3f(x, 0.6f, z);
+  }
+  glEnd();
+
+  // Reverse the rendering order for the bottom face
+  glBegin(GL_TRIANGLE_FAN);
+  glVertex3f(0.0f, -0.9f, 0.0f);  // Center of the bottom face
+
+  for (int i = segments; i >= 0; i--) {  // 改為遞增
+    float angle = slice * i;
+    float x = radius * std::cos(ANGLE_TO_RADIAN(angle));
+    float z = radius * std::sin(ANGLE_TO_RADIAN(angle));  // 使用 std::sin
+    glVertex3f(x, 0.6f, z);
+  }
+  glEnd();
+}
+// 繪製子彈的函數
+void drawBullet() {
+  glPushMatrix();
+  glTranslatef(bulletX, bulletHeight, bulletY);
+  glRotatef(-airplaneRotationY, 0.0f, 1.0f, 0.0f);
+  renderBullet();
+  glEnd();
+  glPopMatrix();
+}
+// Step1. Everytime `G`  be pressed, it will record the right now location for airplane.
+    case GLFW_KEY_G:
+      temp += 3;
+      if (bulletDist == 0) {
+        bulletDist += 30;
+      }
+      break;
+     //record the right now location for airplane. 
+    if (bulletDist == 30) {
+      bulletAngle = forwardAngle-180;
+      bulletX = (airplaneX) - (3 * cos(ANGLE_TO_RADIAN(bulletAngle)));
+      bulletY = ((-3) * sin(ANGLE_TO_RADIAN(bulletAngle)) + airplaneY + 0.5);
+      bulletHeight = airplaneHeight;
+      if (bulletDist == 0 && temp>0) {
+        bulletDist = 30;
+      }
+    }
+//Step2. base on location recorded in `Step1`, render a bullet and let it slow move forward until reach the limit distance 
+    if (temp > 0) {
+      if (bulletDist >= 0) {
+        bulletX += flySpeed * cos(ANGLE_TO_RADIAN(bulletAngle));
+        bulletY += flySpeed * sin(ANGLE_TO_RADIAN(bulletAngle));
+        bulletDist -= 1;
+      }
+      drawBullet();
+      if (bulletDist <= 0) {
+        temp -= 1;
+        bulletDist = 0;
+      }
+    }
+```
