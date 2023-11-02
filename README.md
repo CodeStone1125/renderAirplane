@@ -116,10 +116,17 @@ void Camera::updateProjectionMatrix(float aspectRatio) {
 }
 ```
 ### 2. Render airplane
+In this section, there 4 parts:
+* Body
+* tail
+* wing
+* Airplane
+
 #### I. Body
-1. First, I set length and radius to fit the specification in the "Rules"
-2. Render a cylinder by draw bottom circle, top circle and side of the cylinder perspective
-3. rotate it to make it look like airplane body and move it to location set in the "Rules"
+* Step1. First, I set length and radius to fit the specification in the "Rules"
+* Step2. Render a cylinder by draw bottom circle, top circle and side of the cylinder perspective
+* Step3. rotate it to make it look like airplane body and move it to location set in the "Rules"
+
 ```cpp
 void renderAirplaneBody() {
   const float radius = 0.5f;
@@ -170,9 +177,11 @@ void renderAirplaneBody() {
 ```
 
 #### II. tail
-1. I render tail by draw four triange, which is up, down behind, down LEFT, down right perspective
-2. Move it to the right place and make sure it always be.
-  Note:In this part, I encounter some troubles and I will explain in "Tail's location goes wrong"
+* Step1. I render tail by draw four triange, which is up, down behind, down LEFT, down right perspective
+* Step2. Move it to the right place and make sure it always be.
+  
+  Note: In Step2, I met some troubles and they will be explained in "Tail's location goes wrong"
+
 ```cpp
 void renderAirplaneTail() {
   const float bottomEdge = 2.0f;
@@ -216,8 +225,90 @@ void renderAirplaneTail() {
 }
 ```
 #### III. wing
-### 3. airplane control
+This part is easy just render a cube and make sure it will in right location
+```cpp
+void renderAirplaneWings() {
+  // 設置機翼的顏色和變換
+  glColor3f(RED);  // 設定顏色，例如紅色
 
+  glPushMatrix();
+  glScalef(4.0f, 0.5f, 1.0f);          // 根據需要進行縮放
+  drawUnitCube();                      // 渲染長方體
+  glPopMatrix();
+}
+```
+#### IV. Airplane
+In this fountion I render airplane with `renderAirplaneWings()`,  `renderAirplaneTail() ` 
+and `renderAirplaneBody() `, then move the components to the right place.
+```cpp
+void renderAirplane() {
+    // 渲染飛機的函數，包括機身、機翼和機尾
+    // 渲染機身
+    glPushMatrix();
+    glTranslatef(airplaneX, airplaneHeight, airplaneY);  // 平移至飛機底部中心，增加高度
+    glRotatef(-airplaneRotationY, 0.0f, 1.0f, 0.0f);   // 根據旋轉角度旋轉飛機
+    renderAirplaneBody();                             // 渲染飛機機身
+    glPopMatrix();
+
+    // 渲染左机翼
+    glPushMatrix();
+    glTranslatef(airplaneX, airplaneHeight, airplaneY);
+    glRotatef(-airplaneRotationY, 0.0f, 1.0f, 0.0f);  // 根據旋轉角度旋轉飛機
+    glRotatef(180.0f - wingSwingAngle, 0.0f, 0.0f, 1.0f); 
+    renderAirplaneWings();                                
+    glPopMatrix();
+
+    // 渲染右机翼
+    glPushMatrix();
+    glTranslatef(airplaneX, airplaneHeight, airplaneY);
+    glRotatef(-airplaneRotationY, 0.0f, 1.0f, 0.0f);  // 根據旋轉角度旋轉飛機
+    glRotatef(0.0f + wingSwingAngle, 0.0f, 0.0f, 1.0f); 
+    renderAirplaneWings();                                
+    glPopMatrix();
+
+  // 計算前進方向的角度
+    // 渲染機尾
+    glPushMatrix();
+    glTranslatef((airplaneX) - (3 * cos(ANGLE_TO_RADIAN(forwardAngle))), airplaneHeight,
+                 ((-3) * sin(ANGLE_TO_RADIAN(forwardAngle)) + airplaneY + 0.5));
+    glRotatef(-airplaneRotationY, 0.0f, 1.0f, 0.0f);
+
+
+    glRotatef(180.0f, 0.0f, 0.0f, 1.0f);
+    renderAirplaneTail();
+    glPopMatrix();
+}
+```
+### 3. airplane control
+In this section, there 4 parts:
+* Wings swing
+* fly an forward
+* Airplane body rotation
+* Trace location and angle
+#### I.Wings swing, fly an forward
+* Step1. Everytime `SPACE` be pressed, it will increase the total angle that wings need to swing.
+* Step2. The direction of wing swing will change whenever it meet `20` or `-20` degree.
+  Note:`flag` for decide the direction of wing Swing and it;s default to 1
+```cpp
+   case GLFW_KEY_SPACE:
+      airplaneWingRotation += 80;
+      flag = 1;
+    break;
+
+    if (airplaneWingRotation > 0) {
+      if (flag == 1) {
+        wingSwingAngle += swingSpeed;
+        airplaneWingRotation -= swingSpeed;
+      } else if (flag == 0) {
+        wingSwingAngle -= swingSpeed;
+        airplaneWingRotation -= swingSpeed;
+      }
+    }
+```
+
+#### II.
+#### III.Airplane body rotation
+#### IV.Trace location and angle
 ## Problems you encountered
 ### 1. GFX Glitch
 ### 2. Tail's location goes wrong
